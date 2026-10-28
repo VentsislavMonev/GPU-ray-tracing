@@ -90,12 +90,6 @@ int wmain()
             std::wcout << L"  LUID                : "
                        << adapter_desc.AdapterLuid.HighPart << L":" << adapter_desc.AdapterLuid.LowPart << L"\n";
 
-            std::wcout << L"  Type                : "
-                       << ((adapter_desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE)
-                               ? L"Software (e.g. Microsoft Basic Render Driver)"
-                               : L"Hardware")
-                       << L"\n";
-
             if (!is_software && chosen_adapter == nullptr)
                 chosen_adapter = adapter;
         }
@@ -119,9 +113,12 @@ int wmain()
     D3D12_renderer context;
 
     if (!context.initialize(chosen_adapter.Get()))
+    {
+        std::wcerr << L"Renderer initialization failed" << std::endl;
         return 1;
+    }
 
-    std::wcout << L"Direct3D 12 device, queue, allocator and command list created.\n";
+    std::wcout << L"Renderer initialized successfully.\n";
 
     return 0;
 }
